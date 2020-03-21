@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="eded120f-9fab-4c40-9d29-a13cef0813e9" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="eb066e48-44d2-4eeb-aaca-316776b18772" >
+		<http:listener-connection host="0.0.0.0" port="8085" />
+	</http:listener-config>
+	<flow name="helloworldFlow" doc:id="96754625-c12f-4165-b806-d77df4039082" >
+		<http:listener doc:name="Listener" doc:id="e941fa25-7469-479f-b9e9-22da8e1d873d" config-ref="HTTP_Listener_config1" path="/api/resource"/>
+		<ee:transform doc:name="Transform Message" doc:id="e3f971a4-71e0-49f5-b8a6-e89c89a14ffa" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="hellomessage" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "hellowrold"
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="8360c04f-8640-4b3c-b963-074cecf7456e" message="#[vars.hellomessage]"/>
+	</flow>
+</mule>
